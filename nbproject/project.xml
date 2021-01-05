@@ -3,7 +3,7 @@
     <type>com.microchip.mplab.nbide.embedded.makeproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/make-project/1">
-            <name>001UART_Blink</name>
+            <name>Wireless-Home-Security-System</name>
             <creation-uuid>d635a36a-64ed-4461-863b-a0fcd1d4d97d</creation-uuid>
             <make-project-type>0</make-project-type>
             <c-extensions>c</c-extensions>

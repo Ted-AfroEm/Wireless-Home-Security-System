@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=001UART_Blink.X
+PROJECTNAME=Wireless-Home-Security-System
 
 # Active Configuration
 DEFAULTCONF=default
