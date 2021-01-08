@@ -9,6 +9,7 @@
       <itemPath>Interrupt.h</itemPath>
       <itemPath>UART.h</itemPath>
       <itemPath>device_Config.h</itemPath>
+      <itemPath>gsmSim800l.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
