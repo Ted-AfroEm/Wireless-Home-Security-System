@@ -49,3 +49,5 @@
 
 // CONFIG5L
 #pragma config CP = OFF    // PFM and Data EEPROM Code Protection bit->PFM and Data EEPROM code protection disabled
+
+#define _XTAL_FREQ 4000000
