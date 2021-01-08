@@ -6,6 +6,7 @@ typedef 	int	u16;
 typedef 	long	u32;
 
 #define Buf_Max 		70
+#define STABLE_TIMES	  	10
 
 char Uart1_Buf[Buf_Max];
 uint8_t First_Int = 0;
