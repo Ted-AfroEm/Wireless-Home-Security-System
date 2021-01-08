@@ -15,3 +15,5 @@
 #define LED_4_Toggle()             do { LATBbits.LATB3 = ~LATBbits.LATB3; } while(0)
 
 #define UART1_SendLR() UART1_SendData(0X0D);UART1_SendData(0X0A)
+
+#define KEY1()           PORTCbits.RC5
