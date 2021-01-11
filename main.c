@@ -24,6 +24,7 @@
 #include "UART.h"
 #include "GSM_Errors.h"
 #include "gsmSim800l.h"
+#include "HTTP_Service.h"
 #include "Interrupt.h"
 
 
@@ -63,7 +64,8 @@ void main(void) {
 			{
 				while(!KEY1());
 				
-				ret = call_phone_num(phone_num);
+				//ret = call_phone_num(phone_num);
+                                ret = check_status();
 
 				if(ret == 1)    //1
 				{
