@@ -22,6 +22,7 @@
 #include "IO.h"
 #include "Initialize.h"
 #include "UART.h"
+#include "GSM_Errors.h"
 #include "gsmSim800l.h"
 #include "Interrupt.h"
 
