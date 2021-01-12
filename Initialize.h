@@ -1,6 +1,4 @@
 
-
-
 typedef 	char	u8;
 typedef 	int	u16;
 typedef 	long	u32;
@@ -12,6 +10,8 @@ char Uart1_Buf[Buf_Max];
 uint8_t First_Int = 0;
 
 char Server_URL[90];
+char getHTTPBuffer[Buf_Max];    //Store data from Server
+char getDataSize[3];            //Store getHTTP data size
 
 struct
 {
