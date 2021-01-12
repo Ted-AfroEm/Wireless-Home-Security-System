@@ -11,6 +11,8 @@ typedef 	long	u32;
 char Uart1_Buf[Buf_Max];
 uint8_t First_Int = 0;
 
+char Server_URL[90];
+
 struct
 {
     unsigned char rx;       //this will hold RX byte
