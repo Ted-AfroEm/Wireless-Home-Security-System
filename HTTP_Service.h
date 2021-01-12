@@ -29,7 +29,7 @@ int check_status (void)
 //Terminate Bearer and HTTP
 void terminateBearerHTTP(void){
     UART1_Send_AT_Command("AT+SAPBR=0,1","OK",2,70);  //terminate bearer
-    //UART1_Send_AT_Command("AT+HTTPTERM","OK",2,50);   //terminate HTTP
+    UART1_Send_AT_Command("AT+HTTPTERM","OK",2,50);   //terminate HTTP
 }
 
 u8 Wait_SAPBR(u8 query_times){
