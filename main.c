@@ -69,10 +69,18 @@ void main(void) {
 
 				if(ret == 1)    //1
 				{
-                    LATB = 0x1;
-                    UART1_Send_Greeting("SUCCESS");
-                   //success
+                                    ret = get_data_from_server("\"https://gcpro.herokuapp.com/teset/getdata\"");
+                                    LATB = 0x1;
+                                    UART1_Send_Greeting("SUCCESS");
+                                   //success
 				}
+                                if(ret == -56 || ret == -58)
+				{
+                                    terminateBearerHTTP();
+                                    UART1_Send_Greeting("Bearer terminated");
+                                    LATB = 0x6;
+				}
+				
 				else if(ret == -1) //2
 				{
                     LATB = 0x2;
@@ -96,11 +104,10 @@ void main(void) {
 				{
                     LATB = 0x5;
 				}
-				else    //6
-				{
-                    LATB = 0x6;
-				}
-				
+                              
+				else{
+                                    
+                                }
                 __delay_ms(3000);
                 LATB = 0x00;
                 
