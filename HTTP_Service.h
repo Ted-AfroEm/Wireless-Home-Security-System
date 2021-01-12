@@ -104,6 +104,60 @@ u8 Wait_HTTPACTION(u8 query_times){
     return 0;
 }
 
+
+u8 Wait_HTTPREAD(u8 query_times){
+    u8 i;
+    u8 k;
+    u8 j = 0;
+    u8 l = 2;
+    i = 0;
+    char HTTPGetData[Buf_Max];
+    CLR_Buf();
+    while(i == 0)        			
+    {
+        //HTTP Method Action
+        UART1_Send_Command("AT+HTTPREAD");
+        __delay_ms(8000); 
+
+        for(k=0;k<Buf_Max;k++)      			
+        {
+            if((Uart1_Buf[k+2] == '+')&&(Uart1_Buf[k+3] == 'H')&& (Uart1_Buf[k+4] == 'T')&&(Uart1_Buf[k+5] == 'T')&&(Uart1_Buf[k+6] == 'P')&&
+               (Uart1_Buf[k+7] == 'R')&&(Uart1_Buf[k+8] == 'E')&&(Uart1_Buf[k+9] == 'A')&&(Uart1_Buf[k+10] == 'D'))
+            {                 
+                //remove +HTTPREAD
+                for(int i = 13; i<Buf_Max;i++){
+                    HTTPGetData[i-13] =  Uart1_Buf[i];
+                }
+                //get datasize in char
+                for(int i = 0; i<Buf_Max;i++){
+                    if(HTTPGetData[i]==0xd){
+                        i=Buf_Max;
+                    }else{
+                         getDataSize[i]=HTTPGetData[i];
+                         l++;
+                    }
+                }
+                //convert the char size to int
+                int getBufferSize = atoi(getDataSize);
+                getBufferSize++;    //to correct array 
+                //store get response in getBuffer
+                for(int i = 0; i<=getBufferSize; i++){
+                    getHTTPBuffer[i]=HTTPGetData[i+l];
+                }
+                i = 1;
+                return 1;
+                    }
+                }
+        j++;
+        if(j > query_times)
+        {
+            return 0;
+        }
+
+    }
+    return 0;
+}
+
 int activate_bearer()
 {
     int ret;
@@ -166,7 +220,11 @@ int get_data_from_server(char *URL)
     if(ret==0){
         return AT_HTTPACTION_ERROR;
     }
-    
+    //Read the data 
+    ret = Wait_HTTPREAD(3);
+    if(ret==0){
+        return AT_HTTPREAD_ERROR;
+    }
     
     return ret;
      
