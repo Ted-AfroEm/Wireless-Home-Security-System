@@ -7,6 +7,7 @@ This is wireless home security system using pic18f46k42
 - IR remote to alarm and disalarm the system
 
 # Others 
+- PIR sensor for security intrusion detection
 - Buzzer as siren
 - LEDs for battery low indicator and debuging purpose
 
