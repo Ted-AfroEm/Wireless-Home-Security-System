@@ -32,3 +32,4 @@
 #define AT_HTTPACTION_ERROR                     -62
 #define AT_HTTPREAD_ERROR                       -63
 #define AT_HTTPARA_CONTENT_JSON_ERROR           -64
+#define AT_HTTPDATA_ERROR                       -65
