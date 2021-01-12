@@ -67,6 +67,43 @@ u8 Wait_SAPBR(u8 query_times){
 }
 
 
+u8 Wait_HTTPACTION(u8 query_times){
+    u8 i;
+    u8 k;
+    u8 j = 0;
+    i = 0;
+    CLR_Buf();
+    
+    while(i == 0)        			
+    {
+    //HTTP Method Action
+    UART1_Send_Command("AT+HTTPACTION=0");
+    __delay_ms(8000); 
+
+        for(k=0;k<Buf_Max;k++)      			
+        {
+            if((Uart1_Buf[k+2] == 'O')&&(Uart1_Buf[k+3] == 'K')&&
+                (Uart1_Buf[k+8] == '+')&&(Uart1_Buf[k+9] == 'H')&&(Uart1_Buf[k+10] == 'T')&&(Uart1_Buf[k+11] == 'T')&&(Uart1_Buf[k+12] == 'P')&&
+                (Uart1_Buf[k+13] == 'A')&&(Uart1_Buf[k+14] == 'C')&&(Uart1_Buf[k+15] == 'T')&&(Uart1_Buf[k+16] == 'I')&&(Uart1_Buf[k+17] == 'O')&&(Uart1_Buf[k+18] == 'N'))
+            {
+                if(((Uart1_Buf[k+21] == '0')||(Uart1_Buf[k+21] == '1')||(Uart1_Buf[k+21] == '2')))
+                {
+                    if(((Uart1_Buf[k+23] == '2')&&(Uart1_Buf[k+24] == '0')&&(Uart1_Buf[k+25] == '0'))){
+                        i = 1;
+                        return 1;
+                    }
+                }
+            }
+        }
+        j++;
+        if(j > query_times)
+        {
+            return 0;
+        }
+    }
+    return 0;
+}
+
 int activate_bearer()
 {
     int ret;
@@ -124,6 +161,12 @@ int get_data_from_server(char *URL)
     if(ret==0){
         return AT_HTTPARA_URL_ERROR;
     }
+    //set HTTP method to GET
+    ret = Wait_HTTPACTION(3);
+    if(ret==0){
+        return AT_HTTPACTION_ERROR;
+    }
+    
     
     return ret;
      
