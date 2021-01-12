@@ -3,7 +3,7 @@ typedef 	char	u8;
 typedef 	int	u16;
 typedef 	long	u32;
 
-#define Buf_Max 		70
+#define Buf_Max 		90
 #define STABLE_TIMES	  	10
 
 char Uart1_Buf[Buf_Max];
