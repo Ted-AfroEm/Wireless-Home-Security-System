@@ -13,26 +13,17 @@
  */
 
 #include <xc.h>
-
 #include <stdint.h>
-
 #include "string.h"
-
 #include "device_Config.h"
-
 #include "IO.h"
-
 #include "Initialize.h"
-
 #include "UART.h"
-
 #include "GSM_Errors.h"
-
 #include "gsmSim800l.h"
-
 #include "HTTP_Service.h"
-
 #include "Interrupt.h"
+
 
 
 void main(void) {
@@ -82,8 +73,9 @@ void main(void) {
           LATB = 0x6;
         }
         if (ret == -1) {
-          //reset GSM here 
-          UART1_Send_Greeting("COMMUNITE_ERROR");
+          //reset GSM here
+          UART1_Send_Greeting("COMMUNITE_ERROR"); 
+          //wait for some time
         }
         if (ret == -3) {
           LATB = 0x4;
