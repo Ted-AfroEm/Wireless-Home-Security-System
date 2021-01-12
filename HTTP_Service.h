@@ -204,3 +204,32 @@ int get_data_from_server(char * URL) {
   return ret;
 
 }
+
+//Post HTTP to server
+int post_data_to_server(){
+    int ret;
+    
+    ret = activate_bearer();
+    if (ret == 0) {
+      return AT_SAPBR_ERROR;
+    }
+    //Initialize HTTP Service 
+    ret = UART1_Send_AT_Command("AT+HTTPINIT", "OK", 2, 50);
+    if (ret == 0) {
+      return AT_HTTPINTI_ERROR;
+    }
+    //Set HTTP to Use SSL(secure sockets layer) Function
+    ret = UART1_Send_AT_Command("AT+HTTPSSL=1", "OK", 2, 50);
+    if (ret == 0) {
+      return AT_HTTPSSL_ERROR;
+    }
+    //Set HTTP Bearer profile identifier
+    ret = UART1_Send_AT_Command("AT+HTTPPARA=\"CID\",1", "OK", 2, 50);
+    if (ret == 0) {
+      return AT_HTTPPARA_ERROR;
+    }
+    
+    
+    
+    return ret;
+}
