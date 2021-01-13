@@ -36,7 +36,7 @@ void OSCILLATOR_Initialize(void)
 
 void PIN_Initialize(void)
 {
-    TRISB = 0xF9;       //RB2,RB1,RB0 - are LED outputs
+    TRISB = 0xF9;       //RB2,RB1 - are LED outputs
                         //RB3 - input for RF_Receiver
                         //RB0 - input for PIR Pin
     TRISC = 0xBF;       //RC7 - input(RX) : RC6 - output(TX) //set RC5 as input
