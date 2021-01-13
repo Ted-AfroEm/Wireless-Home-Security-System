@@ -54,7 +54,7 @@ u8 Wait_SAPBR(u8 query_times) {
   return 0;
 }
 
-u8 Wait_HTTPACTION(u8 query_times) {
+u8 GET_HTTPACTION(u8 query_times) {
   u8 i;
   u8 k;
   u8 j = 0;
@@ -86,7 +86,7 @@ u8 Wait_HTTPACTION(u8 query_times) {
   return 0;
 }
 
-u8 Wait_HTTPREAD(u8 query_times) {
+u8 GET_HTTPREAD(u8 query_times) {
   u8 i;
   u8 k;
   u8 j = 0;
@@ -191,12 +191,12 @@ int get_data_from_server(char * URL) {
     return AT_HTTPARA_URL_ERROR;
   }
   //set HTTP method to GET
-  ret = Wait_HTTPACTION(3);
+  ret = GET_HTTPACTION(3);
   if (ret == 0) {
     return AT_HTTPACTION_ERROR;
   }
   //Read the data 
-  ret = Wait_HTTPREAD(3);
+  ret = GET_HTTPREAD(3);
   if (ret == 0) {
     return AT_HTTPREAD_ERROR;
   }
@@ -205,8 +205,41 @@ int get_data_from_server(char * URL) {
 
 }
 
+
+
+u8 POST_HTTPACTION(u8 query_times) {
+  u8 i;
+  u8 k;
+  u8 j = 0;
+  i = 0;
+  CLR_Buf();
+
+  while (i == 0) {
+    //HTTP Method Action
+    UART1_Send_Command("AT+HTTPACTION=1");
+    __delay_ms(8000);
+
+    for (k = 0; k < Buf_Max; k++) {
+      if ((Uart1_Buf[k + 2] == 'O') && (Uart1_Buf[k + 3] == 'K') &&
+        (Uart1_Buf[k + 8] == '+') && (Uart1_Buf[k + 9] == 'H') && (Uart1_Buf[k + 10] == 'T') && (Uart1_Buf[k + 11] == 'T') && (Uart1_Buf[k + 12] == 'P') &&
+        (Uart1_Buf[k + 13] == 'A') && (Uart1_Buf[k + 14] == 'C') && (Uart1_Buf[k + 15] == 'T') && (Uart1_Buf[k + 16] == 'I') && (Uart1_Buf[k + 17] == 'O') && (Uart1_Buf[k + 18] == 'N')) {
+        if (((Uart1_Buf[k + 21] == '0') || (Uart1_Buf[k + 21] == '1') || (Uart1_Buf[k + 21] == '2'))) {
+          if (((Uart1_Buf[k + 23] == '2') && (Uart1_Buf[k + 24] == '0') && (Uart1_Buf[k + 25] == '0'))) {
+            i = 1;
+            return 1;
+          }
+        }
+      }
+    }
+    j++;
+    if (j > query_times) {
+      return 0;
+    }
+  }
+  return 0;
+}
 //Post HTTP to server
-int post_data_to_server(){
+int post_data_to_server(char * URL){
     int ret;
     
     ret = activate_bearer();
@@ -229,7 +262,39 @@ int post_data_to_server(){
       return AT_HTTPPARA_ERROR;
     }
     
+    memset(Server_URL, '\0', 90);
+    strcpy(Server_URL, "AT+HTTPPARA=\"URL\",");
+    strcat(Server_URL, URL);
+    //Set HTTP URL
+    ret = UART1_Send_AT_Command(Server_URL, "OK", 3, 50 * 2);
+    if (ret == 0) {
+      return AT_HTTPARA_URL_ERROR;
+    }
     
+    ret = UART1_Send_AT_Command("AT+HTTPPARA=\"CONTENT\",\"application/x-www-form-urlencoded\"","OK",3,50);
+    if (ret == 0) {
+        return AT_HTTPARA_CONTENT_JSON_ERROR;
+    }
+    //tdata=rg3535 is 12 character 
+    ret = UART1_Send_AT_Command("AT+HTTPDATA=12,8000","DOWNLOAD",2,50*6);
+    if (ret == 0) {
+        return AT_HTTPDATA_ERROR;
+    }
+    //rg3535 is sent to server
+    UART1_Send_Greeting("tdata=rg3535");
     
+    __delay_ms(6000);
+    
+    ret = POST_HTTPACTION(3);
+    if (ret == 0) {
+        return AT_HTTPACTION_ERROR;
+    }
+    
+    //Read the data 
+    ret = GET_HTTPREAD(3);
+    if (ret == 0) {
+      return AT_HTTPREAD_ERROR;
+    }
     return ret;
 }
+
