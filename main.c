@@ -62,7 +62,8 @@ void main(void) {
         ret = check_status();
 
         if (ret == 1) {
-          ret = get_data_from_server("\"https://gcpro.herokuapp.com/teset/getdata\"");
+          //ret = get_data_from_server("\"https://gcpro.herokuapp.com/teset/getdata\"");
+          ret = post_data_to_server("\"https://gcpro.herokuapp.com/teset/send\"");
           LATB = 0x1;
           UART1_Send_Greeting("SUCCESS");
 
