@@ -17,3 +17,5 @@
 #define UART1_SendLR() UART1_SendData(0X0D);UART1_SendData(0X0A)
 
 #define KEY1()           PORTCbits.RC5
+
+#define ir RC0 
