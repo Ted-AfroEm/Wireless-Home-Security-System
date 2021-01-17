@@ -48,7 +48,7 @@ void main(void) {
 
   while (1) {
     __delay_ms(500);
-    LED_1_Toggle();
+    LED_2_Toggle();
 
     if (KEY1() == 0)
 
@@ -64,14 +64,12 @@ void main(void) {
         if (ret == 1) {
           //ret = get_data_from_server("\"https://gcpro.herokuapp.com/teset/getdata\"");
           ret = post_data_to_server("\"https://gcpro.herokuapp.com/teset/send\"");
-          LATB = 0x1;
           UART1_Send_Greeting("SUCCESS");
 
         }
         if (ret == -56 || ret == -58) {
           terminateBearerHTTP();
           UART1_Send_Greeting("Bearer and HTTP Terminated");
-          LATB = 0x6;
         }
         if (ret == -1) {
           //reset GSM here
@@ -79,7 +77,6 @@ void main(void) {
           //wait for some time
         }
         if (ret == -3) {
-          LATB = 0x4;
           UART1_Send_Greeting("SIM_CARD_NO_REG_ERROR");
         }
         __delay_ms(1000);
