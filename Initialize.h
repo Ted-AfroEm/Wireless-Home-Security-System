@@ -36,13 +36,15 @@ void OSCILLATOR_Initialize(void)
 
 void PIN_Initialize(void)
 {
-    TRISB = 0xF9;       //RB2,RB1 - are LED outputs
+    TRISB = 0xD9;       //RB2,RB1 - are LED outputs
                         //RB3 - input for RF_Receiver
                         //RB0 - input for PIR Pin
+                        //RB5 - output for Buzzer
     TRISC = 0xBF;       //RC7 - input(RX) : RC6 - output(TX) //set RC5 as input
                         //RC0 - input for IR_Pin
     ANSELC = 0x1F;      //RC7(TX),RC6(RX) - are Digital 00111111 //set RC5 Digital
-    ANSELB = 0xF0;      //RB3,RB2,RB1,RB0 - are Digital
+    ANSELB = 0xD0;      //RB3,RB2,RB1,RB0 - are Digital
+                        //RB5 - is digital for Buzzer
 	
     RC6PPS = 0x13;      //RC6->UART1:TX1;    
     U1RXPPS = 0x17;     //RC7->UART1:RX1;    
