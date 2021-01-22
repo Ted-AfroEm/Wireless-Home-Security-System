@@ -14,6 +14,13 @@ u8 Find(u8 * a) {
 
 }
 
+void delay_ms(u16 ms) {
+  int i = 0;
+  for (i = 0; i < ms; i++)
+    __delay_ms(20);
+
+}
+
 void UART1_Send_Command(char * s) {
   CLR_Buf();
   while ( * s)
@@ -80,12 +87,6 @@ u8 Wait_CREG(u8 query_times) {
   return 0;
 }
 
-void delay_ms(u16 ms) {
-  int i = 0;
-  for (i = 0; i < ms; i++)
-    __delay_ms(20);
-
-}
 u8 UART1_Send_AT_Command(u8 * b, u8 * a, u8 wait_time, u16 interval_time) {
   u8 i;
 
