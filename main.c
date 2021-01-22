@@ -49,21 +49,15 @@ void main(void) {
   while (1) {
     __delay_ms(500);
     LED_2_Toggle();
+    
+        while (PIR_Motion_detection()) {
 
-    if (KEY1() == 0)
-
-    {
-      __delay_ms(100);
-
-      if (KEY1() == 0) {
-        while (!KEY1()) {}
-
-        //ret = call_phone_num(phone_num);
         ret = check_status();
 
-        if (ret == 1) {
+        if (ret == 1 ) {
+          ret = call_phone_num(phone_num);
           //ret = get_data_from_server("\"https://gcpro.herokuapp.com/teset/getdata\"");
-          ret = post_data_to_server("\"https://gcpro.herokuapp.com/teset/send\"");
+          //ret = post_data_to_server("\"https://gcpro.herokuapp.com/teset/send\"");
           UART1_Send_Greeting("SUCCESS");
 
         }
@@ -83,7 +77,5 @@ void main(void) {
         LATB = 0x00;
 
       }
-    }
-
   }
 }
