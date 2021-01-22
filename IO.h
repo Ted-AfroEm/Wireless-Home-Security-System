@@ -19,3 +19,5 @@
 #define KEY1()           PORTCbits.RC5
 
 #define ir RC0 
+
+#define PIR_Motion_detection PORTBbits.RB0
