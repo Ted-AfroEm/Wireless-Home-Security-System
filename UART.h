@@ -24,6 +24,14 @@ void UART1_Send_Greeting(char * s) {
   UART1_SendLR();
 }
 
+void UART1_SendString(char *s)
+{
+	while(*s)
+	{
+		UART1_SendData(*s++);
+	}
+}
+
 void UART_Initialize(void) {
   rs232.rx = 0;
   rs232.tx = 0;
