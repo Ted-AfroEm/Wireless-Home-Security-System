@@ -60,6 +60,7 @@ void main(void) {
         
         if (ret == 1 ) {
           ret = call_phone_num(phone_num);
+          ret = send_text_message("Owww...There is SECURITY BRIDGE!!!");
           //ret = get_data_from_server("\"https://gcpro.herokuapp.com/teset/getdata\"");
           //ret = post_data_to_server("\"https://gcpro.herokuapp.com/teset/send\"");
           UART1_Send_Greeting("SUCCESS");
