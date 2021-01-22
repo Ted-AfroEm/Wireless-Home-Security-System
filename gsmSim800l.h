@@ -1,5 +1,5 @@
 static u8 * phone_num = "ATD+251974437960;";
-//static u8 *phone_num = "ATD+251967313599;";
+static u8 * text_phone_num = "AT+CMGS=\"+251974437960\"";
 
 u8 Find(u8 * a) {
   PIE3bits.U1IE = 0;
@@ -16,11 +16,38 @@ u8 Find(u8 * a) {
 
 void UART1_Send_Command(char * s) {
   CLR_Buf();
-  while ( * s) //????????
+  while ( * s)
   {
-    UART1_SendData( * s++); //??????
+    UART1_SendData( * s++); 
   }
   UART1_SendLR();
+}
+void UART1_Send_Command_END(char *s)
+{
+	CLR_Buf(); 
+	while(*s)
+	{
+		UART1_SendData(*s++);
+	}
+}
+u8 UART1_Send_AT_Command_END(u8 *b,u8 *a,u8 wait_time,u16 interval_time)         
+{
+	u8 i;
+
+	CLR_Buf(); 
+	i = 0;
+	while(i < wait_time)                    
+	{
+		UART1_Send_Command_END(b);
+		delay_ms(interval_time);
+		if(Find(a))            
+		{
+			return 1;
+		}
+		i++;
+	}
+	
+	return 0;
 }
 
 u8 Wait_CREG(u8 query_times) {
@@ -108,4 +135,48 @@ int call_phone_num(char * phone) {
   UART1_Send_AT_Command("ATH", "OK", 2, 50); //end call
   
   return 1;
+}
+
+int send_text_message(char *content)
+{
+	u8 ret;
+	char end_char[2];
+	
+	end_char[0] = 0x1A;
+	end_char[1] = '\0';
+	
+	//Preferred SMS Message Storage
+	ret = UART1_Send_AT_Command("AT+CPMS=\"SM\",\"ME\",\"SM\"","OK",3,100);
+	if(ret == 0)
+	{
+		return AT_CPMS_ERROR;
+	}
+	//Select SMS Message Format  
+	ret = UART1_Send_AT_Command("AT+CMGF=1","OK",3,50); //Text Modes
+	if(ret == 0)
+	{
+		return AT_CMGF_ERROR;
+	}
+	
+	//Select TE Character Set
+	ret = UART1_Send_AT_Command("AT+CSCS=\"GSM\"","OK",3,50);//"GSM"  GSM 7 bit default alphabet
+	if(ret == 0)
+	{
+		return AT_CSCS_ERROR;
+	}
+	//Send SMS Message
+	ret = UART1_Send_AT_Command(text_phone_num,">",3,50);
+	if(ret == 0)
+	{
+		return AT_CMGS_ERROR;
+	}
+	
+	UART1_SendString(content); //load text to be sent to Buffer
+	ret = UART1_Send_AT_Command_END(end_char,"OK",1,250); // <Ctrl+Z> to specify the end of the SMS
+	if(ret == 0)
+	{
+		return END_CHAR_ERROR;
+	}
+	
+	return 1;
 }
