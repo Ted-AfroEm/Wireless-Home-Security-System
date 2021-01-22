@@ -104,7 +104,7 @@ int call_phone_num(char * phone) {
     return CALL_ERROR;
   }
   
-  delay_ms(500);
+  delay_ms(1000);
   UART1_Send_AT_Command("ATH", "OK", 2, 50); //end call
   
   return 1;
