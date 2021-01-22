@@ -1,5 +1,5 @@
 /*
- * File:   LEDBlink.c
+ * File:   main.c
  * Author: Afro
  *
  * Created on January 5, 2021, 4:53 AM
@@ -51,9 +51,13 @@ void main(void) {
     LED_2_Toggle();
     
         while (PIR_Motion_detection()) {
-
+            
+        TurnON_Buzzer();
+         __delay_ms(2000);
+        TurnOFF_Buzzer();
+        
         ret = check_status();
-
+        
         if (ret == 1 ) {
           ret = call_phone_num(phone_num);
           //ret = get_data_from_server("\"https://gcpro.herokuapp.com/teset/getdata\"");
