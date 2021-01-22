@@ -21,3 +21,7 @@
 #define ir RC0 
 
 #define PIR_Motion_detection() PORTBbits.RB0
+
+#define TurnON_Buzzer()             do { LATBbits.LATB5 = 1; } while(0)
+#define TurnOFF_Buzzer()            do { LATBbits.LATB5 = 0; } while(0)
+#define Toggle_Buzzer()             do { LATBbits.LATB5 = ~LATBbits.LATB5; } while(0)
