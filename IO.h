@@ -20,4 +20,4 @@
 
 #define ir RC0 
 
-#define PIR_Motion_detection PORTBbits.RB0
+#define PIR_Motion_detection() PORTBbits.RB0
