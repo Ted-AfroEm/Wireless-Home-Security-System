@@ -34,7 +34,7 @@ void main(void) {
 
   INTCON0bits.GIE = 1; //Enable the Global Interrupt
 
-  __delay_ms(1000);
+  __delay_ms(250);
 
   UART1_Send_Greeting("What's UP");
   UART1_Send_Greeting("Congrats....UART have successfully send string");
@@ -48,12 +48,12 @@ void main(void) {
 
   while (1) {
     __delay_ms(500);
-    LED_2_Toggle();
+    LED_0_Toggle();
     
         while (PIR_Motion_detection()) {
             
         TurnON_Buzzer();
-         __delay_ms(500);
+         __delay_ms(100);
         TurnOFF_Buzzer();
         
         ret = check_status();
@@ -71,23 +71,24 @@ void main(void) {
           UART1_Send_Greeting("Bearer and HTTP Terminated");
         }
         if (ret == -1) {
-          //reset GSM here
-          UART1_Send_Greeting("COMMUNITE_ERROR");
-          
-          //to reset the GSM
-          UART1_Send_AT_Command("AT+CPOWD=1", "NORMAL POWER DOWN", 1, 50);
-          //wait for 1 min to turn on
-          __delay_ms(40000);
-//          GSM_ResetON();
-//          __delay_ms(200);
-//          GSM_ResetOFF(); 
+            //reset GSM here
+            UART1_Send_Greeting("COMMUNITE_ERROR");
+          /*
+            //to reset the GSM
+            UART1_Send_AT_Command("AT+CPOWD=1", "NORMAL POWER DOWN", 1, 50);
+            //wait for 1 min to turn on
+            __delay_ms(40000);
+            GSM_ResetON();
+            __delay_ms(200);
+            GSM_ResetOFF();
+          */ 
         }
         if (ret == -3) {
           UART1_Send_Greeting("SIM_CARD_NO_REG_ERROR");
         }
         __delay_ms(1000);
         LATB = 0x00;
-
+        
         PIR_Disable(); 
       }
   }
