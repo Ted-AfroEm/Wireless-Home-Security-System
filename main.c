@@ -53,14 +53,14 @@ void main(void) {
         while (PIR_Motion_detection()) {
             
         TurnON_Buzzer();
-         __delay_ms(2000);
+         __delay_ms(500);
         TurnOFF_Buzzer();
         
         ret = check_status();
         
         if (ret == 1 ) {
           ret = call_phone_num(phone_num);
-          ret = send_text_message("Owww...There is SECURITY BRIDGE!!!");
+          //ret = send_text_message("Owww...There is SECURITY BRIDGE!!!");
           //ret = get_data_from_server("\"https://gcpro.herokuapp.com/teset/getdata\"");
           //ret = post_data_to_server("\"https://gcpro.herokuapp.com/teset/send\"");
           UART1_Send_Greeting("SUCCESS");
@@ -72,8 +72,15 @@ void main(void) {
         }
         if (ret == -1) {
           //reset GSM here
-          UART1_Send_Greeting("COMMUNITE_ERROR"); 
-          //wait for some time
+          UART1_Send_Greeting("COMMUNITE_ERROR");
+          
+          //to reset the GSM
+          UART1_Send_AT_Command("AT+CPOWD=1", "NORMAL POWER DOWN", 1, 50);
+          //wait for 1 min to turn on
+          __delay_ms(40000);
+//          GSM_ResetON();
+//          __delay_ms(200);
+//          GSM_ResetOFF(); 
         }
         if (ret == -3) {
           UART1_Send_Greeting("SIM_CARD_NO_REG_ERROR");
@@ -81,6 +88,7 @@ void main(void) {
         __delay_ms(1000);
         LATB = 0x00;
 
+        PIR_Disable(); 
       }
   }
 }
