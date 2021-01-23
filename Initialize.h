@@ -43,11 +43,13 @@ void PIN_Initialize(void)
     TRISC = 0xBF;       //RC7 - input(RX) : RC6 - output(TX) //set RC5 as input
                         //RC0 - input for IR_Pin
     //TRISDbits.TRISD7 = 0x0; //GSM Reset pin
+    TRISD = 0xF0;       //RD0,RD1 - are LED outputs
     
     ANSELC = 0x1F;      //RC7(TX),RC6(RX) - are Digital 00111111 //set RC5 Digital
     ANSELB = 0xD0;      //RB3,RB2,RB1,RB0 - are Digital
                         //RB5 - is digital for Buzzer
-	
+    ANSELD = 0xFO;      //RD0,RD1 are digital
+    
     RC6PPS = 0x13;      //RC6->UART1:TX1;    
     U1RXPPS = 0x17;     //RC7->UART1:RX1;    
 }
