@@ -1,12 +1,12 @@
 
 
-#define LED_0_SetHigh()            do { LATBbits.LATD0 = 1; } while(0)
-#define LED_0_SetLow()             do { LATBbits.LATD0 = 0; } while(0)
-#define LED_1_SetHigh()            do { LATBbits.LATD1 = 1; } while(0)
-#define LED_1_SetLow()             do { LATBbits.LATD1 = 0; } while(0)
+#define LED_0_SetHigh()            do { LATDbits.LATD0 = 1; } while(0)
+#define LED_0_SetLow()             do { LATDbits.LATD0 = 0; } while(0)
+#define LED_1_SetHigh()            do { LATDbits.LATD1 = 1; } while(0)
+#define LED_1_SetLow()             do { LATDbits.LATD1 = 0; } while(0)
 
-#define LED_0_Toggle()             do { LATBbits.LATD0 = ~LATBbits.LATD0; } while(0)
-#define LED_1_Toggle()             do { LATBbits.LATD1 = ~LATBbits.LATD1; } while(0)
+#define LED_0_Toggle()             do { LATDbits.LATD0 = ~LATDbits.LATD0; } while(0)
+#define LED_1_Toggle()             do { LATDbits.LATD1 = ~LATDbits.LATD1; } while(0)
 
 #define UART1_SendLR() UART1_SendData(0X0D);UART1_SendData(0X0A)
 
