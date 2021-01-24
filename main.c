@@ -51,9 +51,9 @@ void main(void) {
     LED_0_Toggle();
     
         while (PIR_Motion_detection()) {
-            
+        LED_1_SetHigh();    
         TurnON_Buzzer();
-         __delay_ms(100);
+         __delay_ms(50);
         TurnOFF_Buzzer();
         
         ret = check_status();
@@ -86,9 +86,9 @@ void main(void) {
         if (ret == -3) {
           UART1_Send_Greeting("SIM_CARD_NO_REG_ERROR");
         }
-        __delay_ms(1000);
-        LATB = 0x00;
-        
+        __delay_ms(250);
+        //LATB = 0x00;
+        LED_1_SetLow();
         PIR_Disable(); 
       }
   }
