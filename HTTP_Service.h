@@ -21,7 +21,7 @@ int check_status(void) {
 
 //Terminate Bearer and HTTP
 void terminateBearerHTTP(void) {
-  UART1_Send_AT_Command("AT+SAPBR=0,1", "OK", 2, 70); //terminate bearer
+  UART1_Send_AT_Command("AT+SAPBR=0,1", "OK", 2, 50*2); //terminate bearer
   UART1_Send_AT_Command("AT+HTTPTERM", "OK", 2, 50); //terminate HTTP
 }
 
@@ -102,6 +102,9 @@ u8 GET_HTTPREAD(u8 query_times) {
     for (k = 0; k < Buf_Max; k++) {
       if ((Uart1_Buf[k + 2] == '+') && (Uart1_Buf[k + 3] == 'H') && (Uart1_Buf[k + 4] == 'T') && (Uart1_Buf[k + 5] == 'T') && (Uart1_Buf[k + 6] == 'P') &&
         (Uart1_Buf[k + 7] == 'R') && (Uart1_Buf[k + 8] == 'E') && (Uart1_Buf[k + 9] == 'A') && (Uart1_Buf[k + 10] == 'D')) {
+        
+        //getToken
+        
         //remove +HTTPREAD
         for (int i = 13; i < Buf_Max; i++) {
           HTTPGetData[i - 13] = Uart1_Buf[i];
@@ -146,7 +149,7 @@ int activate_bearer() {
   if (ret == 0) {
     return AT_SAPBR_APN_ERROR;
   }
-  ret = UART1_Send_AT_Command("AT+SAPBR=1,1", "OK", 2, 50); //Open bearer
+  ret = UART1_Send_AT_Command("AT+SAPBR=1,1", "OK", 2, 50*5); //Open bearer
   if (ret == 0) {
     return AT_SAPBR_OPEN_ERROR;
   }
@@ -217,7 +220,7 @@ u8 POST_HTTPACTION(u8 query_times) {
   while (i == 0) {
     //HTTP Method Action
     UART1_Send_Command("AT+HTTPACTION=1");
-    __delay_ms(8000);
+    delay_ms(50*20);
 
     for (k = 0; k < Buf_Max; k++) {
       if ((Uart1_Buf[k + 2] == 'O') && (Uart1_Buf[k + 3] == 'K') &&
@@ -282,6 +285,66 @@ int post_data_to_server(char * URL){
     }
     //rg3535 is sent to server
     UART1_Send_Greeting("tdata=rg3535");
+    
+    __delay_ms(6000);
+    
+    ret = POST_HTTPACTION(3);
+    if (ret == 0) {
+        return AT_HTTPACTION_ERROR;
+    }
+    
+    //Read the data 
+    ret = GET_HTTPREAD(3);
+    if (ret == 0) {
+      return AT_HTTPREAD_ERROR;
+    }
+    return ret;
+}
+
+//gettoken from https://gcpro.herokuapp.com/user/Login
+int gettoken_from_server(char * URL){
+    int ret;
+    
+    ret = activate_bearer();
+    if (ret == 0) {
+      return AT_SAPBR_ERROR;
+    }
+    //Initialize HTTP Service 
+    ret = UART1_Send_AT_Command("AT+HTTPINIT", "OK", 2, 50);
+    if (ret == 0) {
+      return AT_HTTPINTI_ERROR;
+    }
+    //Set HTTP to Use SSL(secure sockets layer) Function
+    ret = UART1_Send_AT_Command("AT+HTTPSSL=1", "OK", 2, 50);
+    if (ret == 0) {
+      return AT_HTTPSSL_ERROR;
+    }
+    //Set HTTP Bearer profile identifier
+    ret = UART1_Send_AT_Command("AT+HTTPPARA=\"CID\",1", "OK", 2, 50);
+    if (ret == 0) {
+      return AT_HTTPPARA_ERROR;
+    }
+    
+    memset(Server_URL, '\0', 90);
+    strcpy(Server_URL, "AT+HTTPPARA=\"URL\",");
+    strcat(Server_URL, URL);
+    //Set HTTP URL
+    ret = UART1_Send_AT_Command(Server_URL, "OK", 3, 50 * 2);
+    if (ret == 0) {
+      return AT_HTTPARA_URL_ERROR;
+    }
+    
+    ret = UART1_Send_AT_Command("AT+HTTPPARA=\"CONTENT\",\"application/x-www-form-urlencoded\"","OK",3,50);
+    if (ret == 0) {
+        return AT_HTTPARA_CONTENT_JSON_ERROR;
+    }
+    //username=yared&password=1234 is 28 character 
+    ret = UART1_Send_AT_Command("AT+HTTPDATA=28,8000","DOWNLOAD",2,50*6);
+    if (ret == 0) {
+        return AT_HTTPDATA_ERROR;
+    }
+    //send username and password
+    UART1_Send_Greeting("username=yared&password=1234");
     
     __delay_ms(6000);
     
