@@ -1,5 +1,8 @@
-static u8 * phone_num = "ATD+251974437960;";
-static u8 * text_phone_num = "AT+CMGS=\"+251974437960\"";
+//static u8 * phone_num = "ATD+251974437960;";
+//static u8 * text_phone_num = "AT+CMGS=\"+251974437960\"";
+
+static u8 * phone_num = "ATD+251970751906;";
+static u8 * text_phone_num = "AT+CMGS=\"+251970751906\"";
 
 u8 Find(u8 * a) {
   PIE3bits.U1IE = 0;
