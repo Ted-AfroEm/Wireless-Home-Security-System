@@ -43,14 +43,65 @@ void main(void) {
   int ret;
 
   for (i = 0; i < STABLE_TIMES; i++) {
-    __delay_ms(100);
+    __delay_ms(1000);
   }
-
+  LATD = 0x00;
+  
   while (1) {
     __delay_ms(500);
     LED_0_Toggle();
     
         while (PIR_Motion_detection()) {
+        LED_1_SetHigh();    
+        TurnON_Buzzer();
+         __delay_ms(100);
+        TurnOFF_Buzzer();
+        
+        ret = check_status();
+        
+        if (ret == 1 ) {
+            /*
+             * 
+          ret = call_phone_num(phone_num);
+          ret = send_text_message("Owww...There is SECURITY BRIDGE!!!");
+          ret = get_data_from_server("\"https://gcpro.herokuapp.com/teset/getdata\"");
+          ret = post_data_to_server("\"https://gcpro.herokuapp.com/teset/send\"");;
+          ret =  gettoken_from_server("\"https://gcpro.herokuapp.com/user/Login\"");
+             */
+
+          ret = get_data_from_server("\"https://gcpro.herokuapp.com/door/broken\""); 
+          
+          UART1_Send_Greeting("Server Communication Done on door alarm");
+          
+          if(ret != 1){
+               ret = call_phone_num(phone_num);
+              if(ret!=1){
+                  ret = send_text_message("There is SECURITY BRIDGE!!! your door is OPEN");
+              }
+          }
+          
+        }
+        if (ret == -56 || ret == -58) {
+          terminateBearerHTTP();
+          UART1_Send_Greeting("Bearer and HTTP Terminated");
+        }
+        if (ret == -1) {
+            UART1_Send_Greeting("COMMUNITE_ERROR");
+        }
+        if (ret == -3) {
+          UART1_Send_Greeting("SIM_CARD_NO_REG_ERROR");
+        }
+        __delay_ms(250);
+        
+        terminateBearerHTTP();
+        UART1_Send_Greeting("Bearer and HTTP Terminated");
+        
+        LED_1_SetLow();
+        PIR_Disable(); 
+      }
+    LATD = 0x00;
+    
+    while(Window_Open()==0){
         LED_1_SetHigh();    
         TurnON_Buzzer();
          __delay_ms(50);
@@ -59,37 +110,36 @@ void main(void) {
         ret = check_status();
         
         if (ret == 1 ) {
-          ret = call_phone_num(phone_num);
-          //ret = send_text_message("Owww...There is SECURITY BRIDGE!!!");
-          //ret = get_data_from_server("\"https://gcpro.herokuapp.com/teset/getdata\"");
-          //ret = post_data_to_server("\"https://gcpro.herokuapp.com/teset/send\"");
-          UART1_Send_Greeting("SUCCESS");
-
+            
+          ret = get_data_from_server("\"https://gcpro.herokuapp.com/window/broken\"");
+          
+          UART1_Send_Greeting("Server Communication done on window alarm");
+          
+          if(ret != 1){
+               ret = call_phone_num(phone_num);
+              if(ret!=1){
+                  ret = send_text_message("There is SECURITY BRIDGE!!! your Window is OPEN");
+              }
+          }
+          
         }
         if (ret == -56 || ret == -58) {
           terminateBearerHTTP();
           UART1_Send_Greeting("Bearer and HTTP Terminated");
         }
         if (ret == -1) {
-            //reset GSM here
             UART1_Send_Greeting("COMMUNITE_ERROR");
-          /*
-            //to reset the GSM
-            UART1_Send_AT_Command("AT+CPOWD=1", "NORMAL POWER DOWN", 1, 50);
-            //wait for 1 min to turn on
-            __delay_ms(40000);
-            GSM_ResetON();
-            __delay_ms(200);
-            GSM_ResetOFF();
-          */ 
         }
         if (ret == -3) {
           UART1_Send_Greeting("SIM_CARD_NO_REG_ERROR");
         }
         __delay_ms(250);
-        //LATB = 0x00;
+        
+        terminateBearerHTTP();
+        UART1_Send_Greeting("Bearer and HTTP Terminated");
+        
         LED_1_SetLow();
         PIR_Disable(); 
-      }
+    }
   }
 }
