@@ -21,5 +21,6 @@
 #define TurnOFF_Buzzer()            do { LATBbits.LATB5 = 0; } while(0)
 #define Toggle_Buzzer()             do { LATBbits.LATB5 = ~LATBbits.LATB5; } while(0)
 
+#define Window_Open()               PORTBbits.RB2
 //#define GSM_ResetON()               do { LATDbits.LATD7 = 0; } while(0)
 //#define GSM_ResetOFF()              do { LATDbits.LATD7 = 1; } while(0)
